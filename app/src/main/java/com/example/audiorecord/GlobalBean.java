@@ -404,7 +404,7 @@ public class GlobalBean {
                     playFilePath = new FileInputStream(new File(path+"/"+fileName+".txt"));
                     audioPlay = new audioPlay();
                     audioPlay.initPlay(playFilePath);
-                    audioPlay.play();
+                    audioPlay.playInputStream(playFilePath);
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
                 } catch (IOException e) {

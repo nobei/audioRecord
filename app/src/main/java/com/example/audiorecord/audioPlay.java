@@ -78,8 +78,48 @@ public class audioPlay {
             }
         }).start();
 
+    }
+
+    void playInputStream(final InputStream in) throws IOException {
+        if(playStatus == PlayStatus.STATUSPLAY_NO_READY)
+            throw new IllegalStateException("播放尚未初始化,请检查是否禁止了录音权限~");
+
+        if(playStatus == PlayStatus.STATUSPLAY_START)
+            throw new IllegalStateException("正在播放");
 
 
+        audioTrack.play();
+        playStatus = PlayStatus.STATUSPLAY_START;
+
+        playBuffData = null;//不使用字节流
+
+
+
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+
+                int len;
+                byte []carrayBuf = new byte[4800];
+
+                while (true)
+                {
+                    try {
+                        if (playStatus == PlayStatus.STATUSPLAY_START && ((len = in.read(carrayBuf)) != -1)) {
+                            audioTrack.write(carrayBuf,0,len);
+                        }else
+                        {
+                            break;
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+
+                }
+            }
+        }).start();
 
     }
 
