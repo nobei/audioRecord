@@ -403,7 +403,7 @@ public class GlobalBean {
                 try {
                     playFilePath = new FileInputStream(new File(path+"/"+fileName+".txt"));
                     audioPlay = new audioPlay();
-                    audioPlay.initPlay(playFilePath);
+                    audioPlay.initPlay();
                     audioPlay.playInputStream(playFilePath);
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();

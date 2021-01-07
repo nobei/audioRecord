@@ -27,11 +27,13 @@ public class audioPlay {
 
 
 
-    void initPlay(InputStream in) throws IOException {
+    void initPlay(InputStream ...in) throws IOException {
 
         if(playStatus == PlayStatus.STATUSPLAY_NO_READY) {
-            playBuffData = FileUtil.readFileFromInputStream(in);
-
+            if(in.length != 0) //使用字符流
+                playBuffData = FileUtil.readFileFromInputStream(in[0]);
+            else //使用字节流
+                playBuffData = null;
             if (audioTrack == null) {
                 int bufferSize = AudioTrack.getMinBufferSize(AUDIO_SAMPLE_RATE, AudioFormat.CHANNEL_CONFIGURATION_MONO,
                         AUDIO_ENCODING);
@@ -91,7 +93,6 @@ public class audioPlay {
         audioTrack.play();
         playStatus = PlayStatus.STATUSPLAY_START;
 
-        playBuffData = null;//不使用字节流
 
 
 
