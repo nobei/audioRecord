@@ -12,6 +12,7 @@ import android.text.format.DateFormat;
 import android.util.Log;
 
 import java.io.BufferedOutputStream;
+import java.io.BufferedWriter;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -20,13 +21,14 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
-public class audioData {
+public class audioData implements closeSensor{
     //音频输入-麦克风
     private final static int AUDIO_INPUT = MediaRecorder.AudioSource.MIC;
     //采用频率
@@ -40,10 +42,16 @@ public class audioData {
     // 缓冲区字节大小
     private int bufferSizeInBytes = 4800;
 
-    private DataOutputStream   out = null;
+    private OutputStream  out = null;
+
+    private BufferedWriter outShort = null;
 
     //录音对象
     private AudioRecord audioRecord;
+
+    private String recordDir = "recordDir";
+
+    private String saveFileName = null;
 
 
 
@@ -93,7 +101,22 @@ public class audioData {
 
         String path = Environment.getExternalStorageDirectory().getAbsolutePath();
         //File file = FileUtil.createFile(path, "recordData" + System.currentTimeMillis() + ".txt");
-        out = new DataOutputStream(new FileOutputStream(path+ '/' +"recordData" + System.currentTimeMillis() + ".txt"));
+
+
+
+
+        String dirPath = path+"/"+"recordDir";
+
+        File dirFold = new File(dirPath);
+
+        if (!dirFold.exists() && !dirFold.isDirectory())
+            dirFold.mkdirs();
+
+
+        //out = new FileOutputStream(dirPath+ '/' +"recordData" + System.currentTimeMillis() + ".txt");
+
+        saveFileName = dirPath+ '/' +"recordData" + System.currentTimeMillis() + ".txt";
+        outShort = new BufferedWriter (new FileWriter(saveFileName));
 
 
 
@@ -103,12 +126,18 @@ public class audioData {
             public void run() {
                 //writeDataTOFile(listener);
                 byte[] audiodata = new byte[bufferSizeInBytes] ;
+                short[] audioShort = new short[bufferSizeInBytes];
                 status = Status.STATUS_START;
                 while (status == Status.STATUS_START) {
-                    int readsize = audioRecord.read(audiodata, 0,bufferSizeInBytes);
-                    if (AudioRecord.ERROR_INVALID_OPERATION != readsize && out != null) {
+                    //int readsize = audioRecord.read(audiodata, 0,bufferSizeInBytes);
+                    int readsize = audioRecord.read(audioShort,0,bufferSizeInBytes);
+                    if (AudioRecord.ERROR_INVALID_OPERATION != readsize && outShort != null) {
                         try {
-                            out.write(audiodata);
+                            //out.write(audiodata);
+                            for (int i=0;i<audioShort.length;i++) {
+                                String tmp = audioShort[i] + "\r\n";
+                                outShort.write(tmp);
+                            }
 //                        if (listener != null) {
 //                            //用于拓展业务
 //                            listener.recordOfByte(audiodata, 0, audiodata.length);
@@ -141,21 +170,24 @@ public class audioData {
     /**
      * 停止录音
      */
-    public void stopRecord() {
+    public String close() {
         Log.d("AudioRecorder", "===stopRecord===");
+        String res = "";
         if (status == Status.STATUS_NO_READY || status == Status.STATUS_READY) {
             throw new IllegalStateException("录音尚未开始");
         } else {
             audioRecord.stop();
             status = Status.STATUS_STOP;
-            release();
+            res = release();
         }
+
+        return res;
     }
 
     /**
      * 释放资源
      */
-    public void release() {
+    public String release() {
         Log.d("AudioRecorder", "===release===");
         //假如有暂停录音
  //       try {
@@ -186,14 +218,22 @@ public class audioData {
         }
 
         try {
-            out.flush();
-            out.close();
+//            out.flush();
+//            out.close();
+
+            outShort.flush();
+            outShort.close();
         } catch (IOException e) {
             Log.d("fail","文件关闭失败");
             e.printStackTrace();
         }
 
+
+
         status = Status.STATUS_NO_READY;
+
+
+        return saveFileName;
     }
 
     /**

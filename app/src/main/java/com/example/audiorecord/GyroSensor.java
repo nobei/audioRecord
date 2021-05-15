@@ -26,7 +26,7 @@ import java.io.IOException;
 
 import static android.content.ContentValues.TAG;
 
-public class GyroSensor extends Thread implements  SensorEventListener {
+public class GyroSensor extends Thread implements  SensorEventListener,closeSensor{
 //    final int frequency = 20;
     private Sensor Sensor = null;
     private SensorManager sensorManager;
@@ -85,6 +85,9 @@ public class GyroSensor extends Thread implements  SensorEventListener {
             e.printStackTrace();
         }
         Log.d("Sensor","传感器记录结束");
+
+
+
     }
 
 
@@ -96,7 +99,7 @@ public class GyroSensor extends Thread implements  SensorEventListener {
     public void onSensorChanged(SensorEvent event) {
 
             if (event.sensor.getType() == sensorKind && statusFlag) {
-                String data = "x:" + event.values[0] + " y:" + event.values[1] + " z:" + event.values[2] + '\n';
+                String data =  event.values[0] + " " + event.values[1] + " " + event.values[2] + '\n';
                 message = new Message();
                 message.what = 1;
                 message.obj = data;
@@ -121,4 +124,12 @@ public class GyroSensor extends Thread implements  SensorEventListener {
 
     }
 
+    @Override
+    public String close() {
+        closeGyroSensor();
+        String s = file.getAbsolutePath();
+
+        return s;
+
+    }
 }

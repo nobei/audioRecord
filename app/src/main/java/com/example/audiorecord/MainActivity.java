@@ -36,7 +36,11 @@ public class MainActivity extends AppCompatActivity {
     private Button sendCIRButton;
     private Button sendJUMPButton;
     private Button playRecordButton;
+    private Button playFixButton;
     private EditText fileName;
+    private Button playMutiPointCir;
+    private EditText ip;
+    private EditText port;
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
@@ -57,6 +61,10 @@ public class MainActivity extends AppCompatActivity {
         sendJUMPButton = findViewById(R.id.button11);
         playRecordButton = findViewById(R.id.button12);
         fileName = findViewById(R.id.fileName);
+        playFixButton = findViewById(R.id.button14);
+        playMutiPointCir = findViewById(R.id.button13);
+        ip = findViewById(R.id.text3);
+        port = findViewById(R.id.text4);
 
 
 
@@ -89,6 +97,10 @@ public class MainActivity extends AppCompatActivity {
         bean.setPlayCirJumpButton(sendJUMPButton);
         bean.setPlayTestButton(playRecordButton);
         bean.setFileNameToTest(fileName);
+        bean.setPlayFixButton(playFixButton);
+        bean.setPlayMultiPoint(playMutiPointCir);
+        bean.setIp(ip);
+        bean.setPort(port);
 
 
         bean.init();

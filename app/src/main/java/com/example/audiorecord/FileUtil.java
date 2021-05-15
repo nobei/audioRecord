@@ -24,12 +24,17 @@ public class FileUtil {
 
 
 
-    public static File createFile(String path,String name) {
+    public static File createFile(String path,String name,String dir) { //path为路径 dir为存储文件夹（可能不存在） name为文件名
         File file = null;
-        String tmp = Environment.getExternalStorageState();
         if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+            File fold = new File(path+"/"+dir);
+            if(!fold.exists() || !fold.isDirectory())
+                fold.mkdir();
+
+            String dirPath = path+"/"+dir;
+
             try {
-                file = new File(path + '/' + name);
+                file = new File(dirPath + '/' + name);
                 if (!file.exists()) {
                     file.createNewFile();
                 }
@@ -74,8 +79,8 @@ public class FileUtil {
         try{
             String length = file.readLine();
             while(length != null) {
-                float num = Float.parseFloat(length);
-                short n = (short) num;
+                float num = Float.parseFloat(length)*10;
+                short n = (short)num ;
                 r[i++] = n;
                 length = file.readLine();
             }}

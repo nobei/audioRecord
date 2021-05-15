@@ -11,7 +11,8 @@ public class PermissionUtils {
             permission.READ_EXTERNAL_STORAGE,
             permission.WRITE_EXTERNAL_STORAGE,
             permission.RECORD_AUDIO,
-            permission.CAMERA};
+            permission.CAMERA,
+            permission.INTERNET};
 
     /**
      * 解决安卓6.0以上版本不能读取外部存储权限的问题
@@ -26,9 +27,11 @@ public class PermissionUtils {
             int storagePermission = activity.checkSelfPermission(permission.WRITE_EXTERNAL_STORAGE);
             int cameraPermission = activity.checkSelfPermission(permission.CAMERA);
             int microPermission = activity.checkSelfPermission(permission.RECORD_AUDIO);
+            int networkPermission = activity.checkSelfPermission(permission.INTERNET);
             //检测是否有权限，如果没有权限，就需要申请
             if (storagePermission != PackageManager.PERMISSION_GRANTED ||
-                    cameraPermission != PackageManager.PERMISSION_GRANTED || microPermission != PackageManager.PERMISSION_GRANTED) {
+                    cameraPermission != PackageManager.PERMISSION_GRANTED || microPermission != PackageManager.PERMISSION_GRANTED
+            || networkPermission != PackageManager.PERMISSION_GRANTED) {
                 //申请权限
                 activity.requestPermissions(PERMISSIONS_CAMERA_AND_STORAGE, requestCode);
                 //返回false。说明没有授权

@@ -35,10 +35,10 @@ public class audioPlay {
             else //使用字节流
                 playBuffData = null;
             if (audioTrack == null) {
-                int bufferSize = AudioTrack.getMinBufferSize(AUDIO_SAMPLE_RATE, AudioFormat.CHANNEL_CONFIGURATION_MONO,
+                int bufferSize = AudioTrack.getMinBufferSize(AUDIO_SAMPLE_RATE, AudioFormat.CHANNEL_OUT_MONO,
                         AUDIO_ENCODING);
                 audioTrack = new AudioTrack(AudioManager.STREAM_SYSTEM,
-                        48000, 2, AudioFormat.ENCODING_PCM_16BIT, bufferSize,
+                        48000, AudioFormat.CHANNEL_OUT_MONO, AudioFormat.ENCODING_PCM_16BIT, bufferSize,
                         AudioTrack.MODE_STREAM);
 
             }

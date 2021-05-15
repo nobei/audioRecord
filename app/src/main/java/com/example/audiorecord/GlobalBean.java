@@ -8,6 +8,7 @@ import android.media.AudioRecord;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
+import android.text.Editable;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -23,6 +24,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
 
 import static android.content.Context.SENSOR_SERVICE;
 import static android.hardware.Sensor.TYPE_GYROSCOPE;
@@ -56,6 +58,42 @@ public class GlobalBean {
     private Button playCirJumpButton;
     private Button playTestButton;
     private EditText fileNameToTest;
+    private Button playFixButton;
+    private Button playMultiPoint;
+    private EditText ip;
+    private EditText port;
+
+    public EditText getIp() {
+        return ip;
+    }
+
+    public void setIp(EditText ip) {
+        this.ip = ip;
+    }
+
+    public EditText getPort() {
+        return port;
+    }
+
+    public void setPort(EditText port) {
+        this.port = port;
+    }
+
+    public Button getPlayMultiPoint() {
+        return playMultiPoint;
+    }
+
+    public void setPlayMultiPoint(Button playMultiPoint) {
+        this.playMultiPoint = playMultiPoint;
+    }
+
+    public Button getPlayFixButton() {
+        return playFixButton;
+    }
+
+    public void setPlayFixButton(Button playFixButton) {
+        this.playFixButton = playFixButton;
+    }
 
     public EditText getFileNameToTest() {
         return fileNameToTest;
@@ -223,7 +261,7 @@ public class GlobalBean {
             @Override
             public void onClick(View v) {
                 String path = Environment.getExternalStorageDirectory().getAbsolutePath();
-                File file = FileUtil.createFile(path, "gyroSensorData" + System.currentTimeMillis() + ".txt");
+                File file = FileUtil.createFile(path, "gyroSensorData" + System.currentTimeMillis() + ".txt","gyro");
 
                 if (file != null) {
 
@@ -241,7 +279,7 @@ public class GlobalBean {
             @Override
             public void onClick(View v) {
                 String path = Environment.getExternalStorageDirectory().getAbsolutePath();
-                File file = FileUtil.createFile(path, "LinearaccelerateSensorData" + System.currentTimeMillis() + ".txt");
+                File file = FileUtil.createFile(path, "LinearaccelerateSensorData" + System.currentTimeMillis() + ".txt","linear");
 
                 if (file != null) {
 
@@ -271,6 +309,22 @@ public class GlobalBean {
             public void onClick(View v) {
                 if (gyroSensor != null) {
                     gyroSensor.closeGyroSensor();
+
+
+                    networkThread net = null;
+                    String p = ip.getText().toString();
+                    String s = port.getText().toString();
+                    if(!p.equals("") && !s.equals("")) {
+                        net = new networkThread(p.toString(),Integer.valueOf(s.toString()));
+                    }
+
+                    closeSensorHandler proxy =  new closeSensorHandler(gyroSensor,net);
+
+                    closeSensor saveAndSend = (closeSensor) Proxy.newProxyInstance(gyroSensor.getClass().getClassLoader(),gyroSensor.getClass().getInterfaces(),proxy);
+
+
+                    saveAndSend.close();
+
                     gyroSensor = null;
                 }
             }
@@ -298,7 +352,19 @@ public class GlobalBean {
             @Override
             public void onClick(View v) {
                 if (audioRecord != null) {
-                    audioRecord.stopRecord();
+                    networkThread net = null;
+                    String p = ip.getText().toString();
+                    String s = port.getText().toString();
+                    if(!p.equals("") && !s.equals("")) {
+                        net = new networkThread(p.toString(),Integer.valueOf(s.toString()));;
+
+                    }
+                    closeSensorHandler proxy =  new closeSensorHandler(audioRecord,net);
+
+                    closeSensor saveAndSend = (closeSensor) Proxy.newProxyInstance(audioRecord.getClass().getClassLoader(),audioRecord.getClass().getInterfaces(),proxy);
+
+
+                    saveAndSend.close();
                     audioRecord = null;
                 }
             }
@@ -415,6 +481,52 @@ public class GlobalBean {
 
             }
         });
+
+
+        this.playMultiPoint.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                playFilePath = activity.getResources().openRawResource(R.raw.cirmulti);
+
+
+                audioPlay = new audioPlay();
+                if (audioPlay != null) {
+                    try {
+                        audioPlay.initPlay(playFilePath);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    audioPlay.play();
+                }
+
+
+            }
+        });
+
+
+
+        this.playFixButton.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        playFilePath = activity.getResources().openRawResource(R.raw.frefix);
+
+
+                        audioPlay = new audioPlay();
+                        if (audioPlay != null) {
+                            try {
+                                audioPlay.initPlay(playFilePath);
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                            audioPlay.play();
+                        }
+
+                    }
+                }
+
+        );
     }
 
 }

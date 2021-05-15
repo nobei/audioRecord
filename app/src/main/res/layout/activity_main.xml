@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+<LinearLayout
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -16,19 +16,28 @@
         android:layout_height="wrap_content"
         android:text="同时获取陀螺仪与加速计("></Button>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
     <Button
         android:id="@+id/button1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="打开陀螺仪"
- />
+        android:text="打开陀螺仪" />
 
-    <Button
-        android:id="@+id/button2"
-        android:layout_width="wrap_content"
+        <Button
+            android:id="@+id/button2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="关闭陀螺仪" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="关闭陀螺仪"
- />
+        android:orientation="horizontal" >
 
     <Button
         android:id="@+id/button7"
@@ -41,6 +50,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="关闭加速计"></Button>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
 
 
     <Button
@@ -57,6 +72,12 @@
         app:layout_constraintBottom_toBottomOf="parent"
         android:text="停止录音"
  />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
 
     <Button
         android:id="@+id/button5"
@@ -72,16 +93,34 @@
         android:text="停止发射"
  />
 
+    <Button
+        android:id="@+id/button14"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="发射定频声波(17Khz)" />
+    </LinearLayout>
+
     <EditText
         android:id="@+id/text"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="71dp"
 
         android:inputType="textMultiLine"
         android:minLines="5"
         tools:layout_editor_absoluteX="-130dp"
         tools:layout_editor_absoluteY="-193dp" />
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+
+    <Button
+        android:id="@+id/button13"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="发射multiPiontCir" />
 
     <Button
         android:id="@+id/button9"
@@ -89,6 +128,13 @@
         android:layout_height="wrap_content"
         android:text="发射barker码">
     </Button>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
 
     <Button
         android:id="@+id/button10"
@@ -102,6 +148,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="发射调频码"></Button>
+
+
+    </LinearLayout>>
+
 
     <Button
         android:id="@+id/button12"
@@ -117,7 +167,31 @@
         android:inputType="text"
         android:selectAllOnFocus="true"></EditText>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
+        <EditText
+            android:id="@+id/text3"
+            android:layout_width="match_parent"
+            android:layout_height="71dp"
+
+            android:inputType="textMultiLine"
+            android:minLines="5"
+            tools:layout_editor_absoluteX="-130dp"
+            tools:layout_editor_absoluteY="-193dp" />
+
+        <EditText
+            android:id="@+id/text4"
+            android:layout_width="match_parent"
+            android:layout_height="71dp"
+
+            android:inputType="textMultiLine"
+            android:minLines="5"
+            tools:layout_editor_absoluteX="-130dp"
+            tools:layout_editor_absoluteY="-193dp" />
+    </LinearLayout>
 
 
 </LinearLayout>
